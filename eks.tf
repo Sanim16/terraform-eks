@@ -16,7 +16,7 @@ module "eks" {
 
   vpc_id                   = module.vpc.vpc_id
   subnet_ids               = module.vpc.private_subnets
-  control_plane_subnet_ids = [aws_subnet.terraform-eks-2.id, aws_subnet.terraform-eks-1.id]
+  # control_plane_subnet_ids = [aws_subnet.terraform-eks-2.id, aws_subnet.terraform-eks-1.id]
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
