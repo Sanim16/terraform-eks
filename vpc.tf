@@ -22,90 +22,90 @@ module "vpc" {
   }
 }
 
-# Create a VPC
-resource "aws_vpc" "terraform-eks" {
-  cidr_block           = var.vpc_cidr
-  instance_tenancy     = "default"
-  enable_dns_hostnames = true
+# # Create a VPC
+# resource "aws_vpc" "terraform-eks" {
+#   cidr_block           = var.vpc_cidr
+#   instance_tenancy     = "default"
+#   enable_dns_hostnames = true
 
-  tags = {
-    Name = "terraform-eks"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks"
+#   }
+# }
 
-resource "aws_subnet" "terraform-eks" {
-  vpc_id                  = aws_vpc.terraform-eks.id
-  cidr_block              = var.subnet_cidr
-  availability_zone       = "us-east-1a"
-  map_public_ip_on_launch = true
+# resource "aws_subnet" "terraform-eks" {
+#   vpc_id                  = aws_vpc.terraform-eks.id
+#   cidr_block              = var.subnet_cidr
+#   availability_zone       = "us-east-1a"
+#   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "terraform-eks"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks"
+#   }
+# }
 
-resource "aws_subnet" "terraform-eks-1" {
-  vpc_id                  = aws_vpc.terraform-eks.id
-  cidr_block              = "10.0.2.0/24"
-  availability_zone       = "us-east-1b"
-  map_public_ip_on_launch = true
+# resource "aws_subnet" "terraform-eks-1" {
+#   vpc_id                  = aws_vpc.terraform-eks.id
+#   cidr_block              = "10.0.2.0/24"
+#   availability_zone       = "us-east-1b"
+#   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "terraform-eks-1"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks-1"
+#   }
+# }
 
-resource "aws_subnet" "terraform-eks-2" {
-  vpc_id                  = aws_vpc.terraform-eks.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "us-east-1c"
-  map_public_ip_on_launch = true
+# resource "aws_subnet" "terraform-eks-2" {
+#   vpc_id                  = aws_vpc.terraform-eks.id
+#   cidr_block              = "10.0.3.0/24"
+#   availability_zone       = "us-east-1c"
+#   map_public_ip_on_launch = true
 
-  tags = {
-    Name = "terraform-eks-2"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks-2"
+#   }
+# }
 
-resource "aws_internet_gateway" "terraform-eks" {
-  vpc_id = aws_vpc.terraform-eks.id
+# resource "aws_internet_gateway" "terraform-eks" {
+#   vpc_id = aws_vpc.terraform-eks.id
 
-  tags = {
-    Name = "terraform-eks"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks"
+#   }
+# }
 
-resource "aws_route_table" "terraform-eks" {
-  vpc_id = aws_vpc.terraform-eks.id
+# resource "aws_route_table" "terraform-eks" {
+#   vpc_id = aws_vpc.terraform-eks.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.terraform-eks.id
-  }
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.terraform-eks.id
+#   }
 
-  tags = {
-    Name = "terraform-eks"
-  }
-}
+#   tags = {
+#     Name = "terraform-eks"
+#   }
+# }
 
-resource "aws_route_table_association" "terraform-eks" {
-  subnet_id      = aws_subnet.terraform-eks.id
-  route_table_id = aws_route_table.terraform-eks.id
-}
+# resource "aws_route_table_association" "terraform-eks" {
+#   subnet_id      = aws_subnet.terraform-eks.id
+#   route_table_id = aws_route_table.terraform-eks.id
+# }
 
-resource "aws_route_table_association" "terraform-eks-1" {
-  subnet_id      = aws_subnet.terraform-eks-1.id
-  route_table_id = aws_route_table.terraform-eks.id
-}
+# resource "aws_route_table_association" "terraform-eks-1" {
+#   subnet_id      = aws_subnet.terraform-eks-1.id
+#   route_table_id = aws_route_table.terraform-eks.id
+# }
 
-resource "aws_route_table_association" "terraform-eks-2" {
-  subnet_id      = aws_subnet.terraform-eks-2.id
-  route_table_id = aws_route_table.terraform-eks.id
-}
+# resource "aws_route_table_association" "terraform-eks-2" {
+#   subnet_id      = aws_subnet.terraform-eks-2.id
+#   route_table_id = aws_route_table.terraform-eks.id
+# }
 
 resource "aws_security_group" "terraform-eks" {
   name        = "terraform-eks"
   description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.terraform-eks.id
+  vpc_id      = module.vpc.vpc_id
 
   egress {
     from_port   = 0

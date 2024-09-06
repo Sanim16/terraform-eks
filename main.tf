@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "main" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.terraform-eks.id
+  subnet_id = module.vpc.public_subnets[0]
 
   vpc_security_group_ids = [aws_security_group.terraform-eks.id]
 
@@ -32,7 +32,7 @@ resource "aws_instance" "main" {
 
   iam_instance_profile = "eks_profile"
 
-  depends_on = [aws_internet_gateway.terraform-eks]
+  depends_on = [module.vpc]
 
   user_data = file("bootstrap.sh")
 }
@@ -40,7 +40,7 @@ resource "aws_instance" "main" {
 resource "aws_instance" "main1" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.terraform-eks.id
+  subnet_id     = module.vpc.public_subnets[1]
 
   vpc_security_group_ids = [aws_security_group.terraform-eks.id]
 
@@ -55,7 +55,7 @@ resource "aws_instance" "main1" {
 
   iam_instance_profile = "eks_profile"
 
-  depends_on = [aws_internet_gateway.terraform-eks]
+  depends_on = [module.vpc]
 
   user_data = file("bootstrap.sh")
 }
@@ -84,7 +84,7 @@ data "aws_ami" "base_ami" {
 resource "aws_instance" "amazon" {
   ami           = data.aws_ami.base_ami.id
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.terraform-eks.id
+  subnet_id     = module.vpc.public_subnets[2]
 
   vpc_security_group_ids = [aws_security_group.terraform-eks.id]
 
@@ -99,7 +99,7 @@ resource "aws_instance" "amazon" {
 
   iam_instance_profile = "eks_profile"
 
-  depends_on = [aws_internet_gateway.terraform-eks]
+  depends_on = [module.vpc]
 
   # user_data = file("bootstrap.sh")
 }
