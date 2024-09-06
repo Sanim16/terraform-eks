@@ -5,19 +5,20 @@ module "vpc" {
   name = "eks-dev-vpc"
   cidr = var.vpc_cidr
 
-  azs             = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  azs              = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  private_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  public_subnets   = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  database_subnets = ["10.0.201.0/24", "10.0.202.0/24", "10.0.203.0/24"]
 
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
+  enable_nat_gateway   = true
+  enable_vpn_gateway   = true
   single_nat_gateway   = true
   enable_dns_hostnames = true
 
   tags = {
-    Terraform = "true"
+    Terraform   = "true"
     Environment = "dev"
-    Name = "terraform-eks"
+    Name        = "terraform-eks"
   }
 }
 
@@ -33,9 +34,9 @@ resource "aws_vpc" "terraform-eks" {
 }
 
 resource "aws_subnet" "terraform-eks" {
-  vpc_id            = aws_vpc.terraform-eks.id
-  cidr_block        = var.subnet_cidr
-  availability_zone = "us-east-1a"
+  vpc_id                  = aws_vpc.terraform-eks.id
+  cidr_block              = var.subnet_cidr
+  availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
   tags = {
@@ -44,9 +45,9 @@ resource "aws_subnet" "terraform-eks" {
 }
 
 resource "aws_subnet" "terraform-eks-1" {
-  vpc_id            = aws_vpc.terraform-eks.id
-  cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1b"
+  vpc_id                  = aws_vpc.terraform-eks.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone       = "us-east-1b"
   map_public_ip_on_launch = true
 
   tags = {
@@ -55,9 +56,9 @@ resource "aws_subnet" "terraform-eks-1" {
 }
 
 resource "aws_subnet" "terraform-eks-2" {
-  vpc_id            = aws_vpc.terraform-eks.id
-  cidr_block        = "10.0.3.0/24"
-  availability_zone = "us-east-1c"
+  vpc_id                  = aws_vpc.terraform-eks.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone       = "us-east-1c"
   map_public_ip_on_launch = true
 
   tags = {

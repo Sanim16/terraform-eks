@@ -5,7 +5,7 @@ module "eks" {
   cluster_name    = "my-dev-cluster"
   cluster_version = "1.30"
 
-  cluster_endpoint_public_access  = true
+  cluster_endpoint_public_access = true
 
   cluster_addons = {
     coredns                = {}
@@ -14,8 +14,8 @@ module "eks" {
     vpc-cni                = {}
   }
 
-  vpc_id                   = module.vpc.vpc_id
-  subnet_ids               = module.vpc.private_subnets
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnets
   # control_plane_subnet_ids = [aws_subnet.terraform-eks-2.id, aws_subnet.terraform-eks-1.id]
 
   # EKS Managed Node Group(s)

@@ -11,5 +11,5 @@ variable "subnet_cidr" {
 }
 
 variable "region" {
-  default     = "us-east-1"
+  default = "us-east-1"
 }
