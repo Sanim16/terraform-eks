@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "main" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = "t2.micro"
-  subnet_id = module.vpc.public_subnets[0]
+  subnet_id     = module.vpc.public_subnets[0]
 
   vpc_security_group_ids = [aws_security_group.terraform-eks.id]
 
@@ -46,7 +46,7 @@ resource "aws_instance" "main1" {
 
   associate_public_ip_address = true
 
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-1b"
   key_name          = "terraformkey"
 
   tags = {
@@ -90,7 +90,7 @@ resource "aws_instance" "amazon" {
 
   associate_public_ip_address = true
 
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-1c"
   key_name          = "terraformkey"
 
   tags = {

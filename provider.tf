@@ -6,7 +6,7 @@ terraform {
   #############################################################
   # backend "s3" {
   #   bucket         = "unique-bucket-name-msctf" # REPLACE WITH YOUR BUCKET NAME
-  #   key            = "remote-backend/terraform.tfstate"
+  #   key            = "eks-remote-backend/terraform.tfstate"
   #   region         = "us-east-1"
   #   dynamodb_table = "terraform-state-locking"
   #   encrypt        = true
