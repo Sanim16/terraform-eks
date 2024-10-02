@@ -10,7 +10,40 @@ volumeBindingMode: WaitForFirstConsumer
 parameters:
   csi.storage.k8s.io/fstype: ext4
   type: gp3
+  fsType: ext4
   encrypted: "true"
-  kmsKeyId: "4ecba96e-d3a2-4389-aac7-6f8320d3c5e6"
+  kmsKeyId: "arn:aws:kms:us-east-1:771700505853:key/c593e790-2cf8-470c-b99a-ffe6806ed3fe"
 reclaimPolicy: Delete
 allowVolumeExpansion: true
+
+# ---
+
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: ebs-sc
+#   annotations:
+#     storageclass.kubernetes.io/is-default-class: "true"
+# provisioner: ebs.csi.aws.com
+# # Below mode will not create pv even after creating pvc until some pod is associated with that pvc
+# volumeBindingMode: WaitForFirstConsumer
+# parameters:
+#   type: gp3
+#   fsType: ext4
+
+# ---
+# apiVersion: storage.k8s.io/v1
+#   kind: StorageClass
+#   metadata:
+#     annotations:
+#       storageclass.kubernetes.io/is-default-class: "true"
+#     name: gp3-default
+#   provisioner: ebs.csi.aws.com
+#   reclaimPolicy: Delete
+#   volumeBindingMode: WaitForFirstConsumer
+#   allowVolumeExpansion: true
+#   parameters:
+#     type: gp3  
+#     fsType: ext4
+#     encrypted: "true"
+#     kmsKeyId: "arn:aws:kms:us-east-1:771700505853:key/c593e790-2cf8-470c-b99a-ffe6806ed3fe"

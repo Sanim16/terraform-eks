@@ -1,15 +1,15 @@
 output "private_subnet_ids" {
-  value = module.vpc.private_subnets
+  value       = module.vpc.private_subnets
   description = "private subnet ids"
 }
 
 output "vpc_id" {
-  value = module.vpc.vpc_id
+  value       = module.vpc.vpc_id
   description = "The VPC ID"
 }
 
 output "security_group_id" {
-  value = aws_security_group.terraform-dev-vpc.id
+  value       = aws_security_group.terraform-dev-vpc.id
   description = "The security group ID"
 }
 
