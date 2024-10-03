@@ -23,7 +23,7 @@ module "eks" {
 
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_ids = data.terraform_remote_state.vpc.outputs.private_subnet_ids
-  # control_plane_subnet_ids = data.terraform_remote_state.vpc.outputs.intra_subnet_ids
+  control_plane_subnet_ids = data.terraform_remote_state.vpc.outputs.intra_subnet_ids
 
 
   # EKS Managed Node Group(s)
