@@ -1,4 +1,4 @@
-# Deploy AWS EKS using Terraform along with VPC
+# Deploy AWS EKS using Terraform
 
 >This is a Terraform project that deploys an EKS cluster along with a VPC, KMS(for encryption) and S3 & Dynamodb for backend management.
 
