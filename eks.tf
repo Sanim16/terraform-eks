@@ -3,10 +3,10 @@
 ###############################################################################
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "20.23.0"
+  version = "~> 20.0"
 
-  cluster_name    = "dev-cluster"
-  cluster_version = "1.30"
+  cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
 
   cluster_endpoint_public_access = true
 
@@ -15,26 +15,33 @@ module "eks" {
     eks-pod-identity-agent = {}
     kube-proxy             = {}
     vpc-cni                = {}
+    aws-ebs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = module.ebs_csi_irsa_role.iam_role_arn
+    }
   }
 
   vpc_id     = data.terraform_remote_state.vpc.outputs.vpc_id
   subnet_ids = data.terraform_remote_state.vpc.outputs.private_subnet_ids
-  # control_plane_subnet_ids = module.vpc.intra_subnets
+  # control_plane_subnet_ids = data.terraform_remote_state.vpc.outputs.intra_subnet_ids
+
 
   # EKS Managed Node Group(s)
   eks_managed_node_group_defaults = {
-    instance_types = ["t3.medium"]
+    instance_types = ["m5.large", "m5n.large", "m5zn.large", "t3.small", "t3.medium"]
   }
 
   eks_managed_node_groups = {
-    "one-ng" = {
+    first = {
+      name = "node-grp-1"
+
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t3.medium"]
 
       min_size     = 2
       max_size     = 10
-      desired_size = 2
+      desired_size = 3
 
       block_device_mappings = {
         xvda = {
@@ -50,7 +57,6 @@ module "eks" {
           }
         }
       }
-
     }
   }
 
@@ -63,6 +69,7 @@ module "eks" {
     example = {
       kubernetes_groups = []
       principal_arn     = var.user
+      # principal_arn = "arn:aws:iam::123456789012:role/something"
 
       policy_associations = {
         example = {
@@ -76,7 +83,6 @@ module "eks" {
     }
   }
 
-
   create_kms_key = false
   cluster_encryption_config = {
     resources        = ["secrets"]
@@ -88,6 +94,7 @@ module "eks" {
     Terraform   = "true"
   }
 }
+
 
 ###############################################################################
 # EBS CSI
@@ -120,19 +127,19 @@ data "aws_eks_addon_version" "ebs_csi" {
   most_recent        = true
 }
 
-resource "aws_eks_addon" "ebs_csi" {
-  cluster_name = module.eks.cluster_name
-  addon_name   = "aws-ebs-csi-driver"
+# resource "aws_eks_addon" "ebs_csi" {
+#   cluster_name = module.eks.cluster_name
+#   addon_name   = "aws-ebs-csi-driver"
 
-  addon_version               = data.aws_eks_addon_version.ebs_csi.version
-  resolve_conflicts_on_update = "PRESERVE"
-  service_account_role_arn    = module.ebs_csi_irsa_role.iam_role_arn
+#   addon_version               = data.aws_eks_addon_version.ebs_csi.version
+#   resolve_conflicts_on_update = "PRESERVE"
+#   service_account_role_arn    = module.ebs_csi_irsa_role.iam_role_arn
 
-  tags = {
-    Environment = "dev"
-    Terraform   = "true"
-  }
-}
+#   tags = {
+#     Environment = "dev"
+#     Terraform   = "true"
+#   }
+# }
 
 ###############################################################################
 # Storage Class

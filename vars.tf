@@ -2,6 +2,16 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "cluster_name" {
+  description = "The name of the cluster"
+  default = "dev-cluster"
+}
+
+variable "cluster_version" {
+  description = "The version of the cluster"
+  default = "1.30"
+}
+
 variable "user" {
   description = "my aws IAM user to add to the admin rights to"
   # default = ""
