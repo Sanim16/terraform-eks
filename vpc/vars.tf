@@ -1,3 +1,8 @@
+variable "vpc_name" {
+  description = "The name of the vpc"
+  default = "dev-vpc"
+}
+
 variable "vpc_cidr" {
   type        = string
   description = "cidr block for the vpc"

@@ -2,7 +2,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "dev-vpc"
+  name = var.vpc_name
   cidr = var.vpc_cidr
 
   azs              = ["us-east-1a", "us-east-1b", "us-east-1c"]
@@ -21,12 +21,12 @@ module "vpc" {
   tags = {
     Terraform   = "true"
     Environment = "dev"
-    Name        = "dev-vpc"
+    Name        = var.vpc_name
   }
 }
 
 resource "aws_security_group" "terraform-dev-vpc" {
-  name        = "terraform-dev-vpc"
+  name        = "terraform-${var.vpc_name}"
   description = "Allow TLS inbound traffic and all outbound traffic"
   vpc_id      = module.vpc.vpc_id
 
@@ -38,7 +38,7 @@ resource "aws_security_group" "terraform-dev-vpc" {
   }
 
   tags = {
-    Name = "terraform-dev-vpc"
+    Name = "terraform-${var.vpc_name}"
   }
 }
 

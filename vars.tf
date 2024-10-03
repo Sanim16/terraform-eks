@@ -13,7 +13,7 @@ variable "cluster_version" {
 }
 
 variable "user" {
-  description = "my aws IAM user to add to the admin rights to"
+  description = "AWS IAM user to give admin rights to via access entries"
   # default = ""
 }
 
